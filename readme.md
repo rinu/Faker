@@ -889,6 +889,26 @@ echo $faker->mobileNumber; // 082 123 5555
 echo $faker->dni; // '77446565E'
 ```
 
+### `Faker\Provider\es_MX\Person`
+
+```php
+<?php
+
+// Generates a persons Registro Federal de Contribuyentes (RFC) number
+echo $faker->personRfc; // 'DEGM070303BXP'
+
+// Generates a Clave Única de Registro de Población (CURP) number
+echo $faker->curp; // 'DEDF061127HNEDDF28'
+```
+### `Faker\Provider\es_MX\Payment`
+
+```php
+<?php
+
+// Generates a Clave Bancaria Estandarizada (CLABE) number
+echo $faker->clabe; // '062250246560174552'
+```
+
 ### `Faker\Provider\fr_BE\Payment`
 
 ```php
