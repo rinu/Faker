@@ -1,18 +1,30 @@
 <?php
 
-namespace Faker\Provider\lv_LV;
+namespace Faker\Provider\ng_NG;
 
 class Address extends \Faker\Provider\Address
 {
-    protected static $cityPrefix = array('pilsēta');
+    protected static $postcode = array('#####', '## ###');
 
-    protected static $regionSuffix = array('reģions');
-    protected static $streetPrefix = array(
-        'iela', 'bulvāris', 'skvērs', 'gāte',
+    private static $county = array(
+        'Abuja', 'Abia', 'Adamawa', 'Akwa Ibom', 'Anambra',
+        'Bauchi', 'Bayelsa', 'Benue', 'Borno',
+        'Cross River',
+        'Delta',
+        'Ebonyi', 'Edo', 'Ekiti', 'Enugu', 'Gombe',
+        'Imo', 'Jigawa',
+        'Kaduna', 'Kano', 'Katsina', 'Kebbi', 'Kogi', 'Kwara',
+        'Lagos',
+        'Nasarawa', 'Niger',
+        'Ogun', 'Ondo', 'Osun', 'Oyo',
+        'Plateau',
+        'Rivers',
+        'Sokoto',
+        'Taraba',
+        'Yobe',
+        'Zamfara'
     );
 
-    protected static $buildingNumber = array('##');
-    protected static $postcode = array('LV ####');
     protected static $country = array(
         'Afghanistan', 'Albania', 'Algeria', 'American Samoa', 'Andorra', 'Angola', 'Anguilla', 'Antarctica (the territory South of 60 deg S)', 'Antigua and Barbuda', 'Argentina', 'Armenia', 'Aruba', 'Australia', 'Austria', 'Azerbaijan',
         'Bahamas', 'Bahrain', 'Bangladesh', 'Barbados', 'Belarus', 'Belgium', 'Belize', 'Benin', 'Bermuda', 'Bhutan', 'Bolivia', 'Bosnia and Herzegovina', 'Botswana', 'Bouvet Island (Bouvetoya)', 'Brazil', 'British Indian Ocean Territory (Chagos Archipelago)', 'British Virgin Islands', 'Brunei Darussalam', 'Bulgaria', 'Burkina Faso', 'Burundi',
@@ -41,74 +53,46 @@ class Address extends \Faker\Provider\Address
         'Zambia', 'Zimbabwe'
     );
 
-    protected static $region = array(
-        'Kurzemes', 'Latgales', 'Rīgas', 'Vidzemes', 'Zemgales'
+    private static $regions = array(
+        'Abakaliki', 'Abeokuta', 'Akure', 'Asaba', 'Awka',
+        'Bauchi',
+        'Calabar', 'City',
+        'Damaturu', 'Dutse',
+        'Ekiti', 'Enugu',
+        'Gombe', 'Gusau',
+        'Ibadan', 'Ikeja', 'Ilorin',
+        'Jalingo', 'Jos',
+        'Kaduna', 'Kano', 'Katsina', 'Kebbi',
+        'Lafia', 'Lokoja',
+        'Maiduguri', 'Makurdi', 'Minna',
+        'Oshogbo', 'Owerri',
+        'Port-Harcourt',
+        'Sokoto',
+        'Umuahia', 'Uyo',
+        'Yenagoa', 'Yola'
     );
 
-    protected static $city = array('Aizkraukle' ,'Aluksne','Balvi', 'Bauska','Cesis',
-        'Daugavpils', 'Dobele','Gulbene', 'Jekabpils', 'Jelgava', 'Kraslava', 'Kuldiga', 'Liepaja',
-        'Limbazi', 'Ludza', 'Madona', 'Mobile Phones', 'Ogre', 'Preili', 'Rezekne', 'Rīga', 'Ventspils'
-    );
-
-    protected static $street = array(
-        'Alfrēda Kalniņa', 'Alksnāja', 'Amatu', 'Anglikāņu', 'Arhitektu', 'Arsenāla', 'Artilērijas',
-        'Aspazijas', 'Atgriežu', 'Audēju', 'Basteja', 'Baumaņa', 'Bīskapa', 'Blaumaņa', 'Brīvības', 'Brīvības',
-        'Bruņinieku', 'Dainas', 'Daugavas'
-    );
-
-    protected static $addressFormats = array(
-        "{{postcode}}, {{region}} {{regionSuffix}}, {{city}} {{cityPrefix}}, {{street}} {{streetPrefix}}, {{buildingNumber}}",
-    );
-
-    public static function buildingNumber()
+    /**
+     * Randomly returns a Nigerian state or county.
+     *
+     * @example 'Lagos'
+     *
+     * @return string
+     */
+    public static function county()
     {
-        return static::numerify(static::randomElement(static::$buildingNumber));
+        return static::randomElement(static::$county);
     }
 
-    public function address()
-    {
-        $format = static::randomElement(static::$addressFormats);
-
-        return $this->generator->parse($format);
-    }
-
-    public static function country()
-    {
-        return static::randomElement(static::$country);
-    }
-
-    public static function postcode()
-    {
-        return static::toUpper(static::bothify(static::randomElement(static::$postcode)));
-    }
-
-    public static function regionSuffix()
-    {
-        return static::randomElement(static::$regionSuffix);
-    }
-
+    /**
+     * Randomly returns a Nigerian region of a state.
+     *
+     * @example 'Ikeja'
+     *
+     * @return string
+     */
     public static function region()
     {
-        return static::randomElement(static::$region);
-    }
-
-    public static function cityPrefix()
-    {
-        return static::randomElement(static::$cityPrefix);
-    }
-
-    public function city()
-    {
-        return static::randomElement(static::$city);
-    }
-
-    public static function streetPrefix()
-    {
-        return static::randomElement(static::$streetPrefix);
-    }
-
-    public static function street()
-    {
-        return static::randomElement(static::$street);
+        return static::randomElement(static::$regions);
     }
 }
