@@ -18,13 +18,40 @@ class PersonTest extends \PHPUnit_Framework_TestCase
     public function testCurp()
     {
         $curp = $this->faker->curp;
-        $this->assertTrue(static::dni($curp));
+        $this->assertTrue(static::dni($curp), 'curp is valid');
     }
 
     public function testRFC()
     {
         $rfc = $this->faker->personRfc;
-        $this->assertRegExp('/^[a-zA-Z]{3,4}[0-9]{2}[0-1]{1}[0-9]{1}[0-3]{1}[0-9]{1}[a-zA-Z0-9]{3}$/',$rfc);
+        $this->assertRegExp('/^[a-zA-Z]{3,4}[0-9]{2}[0-1]{1}[0-9]{1}[0-3]{1}[0-9]{1}[a-zA-Z0-9]{3}$/', $rfc);
+    }
+
+    public function testCurpWithFirstNames()
+    {
+        $curp = $this->faker->curp('Darío');
+
+        $this->assertEquals('D', substr($curp, 3, 1));
+    }
+
+    public function testCurpWithFathersLastName()
+    {
+        $curp = $this->faker->curp('Darío', 'Estrada');
+        $this->assertEquals('E', substr($curp, 0, 1));
+        $this->assertEquals('A', substr($curp, 1, 1));
+    }
+
+    public function testCurpWithMothersLastName()
+    {
+        $curp = $this->faker->curp(null, null, 'Estrada');
+        $this->assertEquals('E', substr($curp, 2, 1));
+    }
+
+    public function testCurpFirstPart()
+    {
+        $curp = $this->faker->curp('Darío', 'Estrada', 'Lucía', new \DateTime('1981-04-27'), Person::GENDER_FEMALE, 'PL');
+
+        $this->assertEquals('EALD810427MPLSCR', substr($curp, 0, 16));
     }
 
     /**
@@ -38,11 +65,12 @@ class PersonTest extends \PHPUnit_Framework_TestCase
      *
      * @access  public
      * @return  bool    Passed / Not passed
-     * 
+     *
      * @link       https://github.com/pear/Validate_esMX/blob/master/Validate/esMX.php (Validator taken from there)
      */
     public static function dni($dni)
     {
+        
         $dns = strtoupper($dni);
         //Clean it
         $dni = str_replace(array('-', ' '), '', $dni);
@@ -57,7 +85,7 @@ class PersonTest extends \PHPUnit_Framework_TestCase
             //Check the region.
             if (isset($matches[6])) {
                 //Not a state or NE (foreign)
-                if ($matches[6] != 'NE' && !static::region($matches[6])) {
+                if ($matches[6] != 'NE' && !static::isRegionValid($matches[6])) {
                     return false;
                 }
             } else {
@@ -86,7 +114,7 @@ class PersonTest extends \PHPUnit_Framework_TestCase
                 //CURP algorithm to get the digitVerifier.
                 $algChar            = '';
                 $curpVerifier       = '';
-                $counterDigit       = '';
+                $counterDigit       = 0;
                 $l_digito           = '';
                 $l_posicion         = '';
                 $digitModule        = '';
@@ -110,7 +138,7 @@ class PersonTest extends \PHPUnit_Framework_TestCase
                     }
                 }
                 for ($i=1; $i<strlen($dni); $i++) {
-                    $counterDigit += $curpVerifier{($i*2-1)} * (19 - $i);
+                    $counterDigit += (int)$curpVerifier{($i * 2 - 1)} * (19 - $i);
                 }
                 $digitModule = $counterDigit % 10;
                 if ($digitModule == 0) {
@@ -140,41 +168,41 @@ class PersonTest extends \PHPUnit_Framework_TestCase
      * @access  public
      * @return  bool    Passed / Not passed
      */
-    public static function region($region)
+    public static function isRegionValid($region)
     {
         switch (strtoupper($region)) {
-        case 'AS': //Aguascalientes
-        case 'BC': //Baja California
-        case 'BS': //Baja California Sur
-        case 'CC': //Campeche
-        case 'CL': //Coahuila
-        case 'CM': //Colima
-        case 'CS': //Chiapas
-        case 'CH': //Chihuahua
-        case 'DF': //Distrito Federal
-        case 'DG': //Durango
-        case 'GT': //Guanajuato
-        case 'GR': //Guerrero
-        case 'HG': //Hidalgo
-        case 'JC': //Jalisco
-        case 'MC': //Mexico
-        case 'MN': //Michoacán
-        case 'MS': //Morelos
-        case 'NT': //Nayarit
-        case 'NL': //Nuevo León
-        case 'OC': //Oaxaca
-        case 'PL': //Puebla
-        case 'QT': //Querétaro
-        case 'QR': //Quintana Roo
-        case 'SP': //San Luis Potosí
-        case 'SL': //Sinaloa
-        case 'SR': //Sonora
-        case 'TC': //Tabasco
-        case 'TS': //Tamaulipas
-        case 'TL': //Tlaxcala
-        case 'VZ': //Veracruz
-        case 'YN': //Yucatán
-        case 'ZS': //Zacatecas
+            case 'AS': //Aguascalientes
+            case 'BC': //Baja California
+            case 'BS': //Baja California Sur
+            case 'CC': //Campeche
+            case 'CL': //Coahuila
+            case 'CM': //Colima
+            case 'CS': //Chiapas
+            case 'CH': //Chihuahua
+            case 'DF': //Distrito Federal
+            case 'DG': //Durango
+            case 'GT': //Guanajuato
+            case 'GR': //Guerrero
+            case 'HG': //Hidalgo
+            case 'JC': //Jalisco
+            case 'MC': //Mexico
+            case 'MN': //Michoacán
+            case 'MS': //Morelos
+            case 'NT': //Nayarit
+            case 'NL': //Nuevo León
+            case 'OC': //Oaxaca
+            case 'PL': //Puebla
+            case 'QT': //Querétaro
+            case 'QR': //Quintana Roo
+            case 'SP': //San Luis Potosí
+            case 'SL': //Sinaloa
+            case 'SR': //Sonora
+            case 'TC': //Tabasco
+            case 'TS': //Tamaulipas
+            case 'TL': //Tlaxcala
+            case 'VZ': //Veracruz
+            case 'YN': //Yucatán
+            case 'ZS': //Zacatecas
             return true;
         }
         return false;
