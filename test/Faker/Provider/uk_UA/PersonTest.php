@@ -68,7 +68,7 @@ class PersonTest extends TestCase
         $faker->addProvider(new Person($faker));
         $faker->seed(1);
 
-        $this->assertEquals('3476157905', $faker->IndividualIdentificationNumber(new \DateTime('1995-03-04')));
+        $this->assertEquals('3476100763', $faker->IndividualIdentificationNumber(new \DateTime('1995-03-04')));
     }
 
     public function testIndividualIdentificationNumberFemale()
