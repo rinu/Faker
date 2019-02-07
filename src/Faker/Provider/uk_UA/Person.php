@@ -103,14 +103,13 @@ class Person extends \Faker\Provider\Person
      * Check digit calculation algorithm:
      * @link https://github.com/iiifx-production/ukraine-identification-number
      * @param  DateTime $birthdate
-     * @param  string   $sex       M for male or F for female
-     * @return string   10 digit number, like 34713401358
+     * @param  string   $sex 'male' for male or 'female' for female
+     * @return string   10 digit number, for example: 34713401358
      */
     public static function individualIdentificationNumber($birthdate = null, $sex = null)
     {
-        if ($birthdate === null) {
-            $birthdate = \Faker\Provider\DateTime::dateTimeThisCentury();
-        }
+        $birthdate = $birthdate ?: \Faker\Provider\DateTime::dateTimeThisCentury();
+        $sex = $sex ?: self::randomElement(array(static::GENDER_MALE, static::GENDER_FEMALE));
 
         // real life examples shows that the birth date itself is also included in counting the days from 1900-01-01
         $iid = $birthdate->diff(new \DateTime('1900-01-01'))->days + 1;
