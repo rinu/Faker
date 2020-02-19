@@ -6,7 +6,7 @@ use Faker\Generator;
 use Faker\Provider\uk_UA\Person;
 use PHPUnit\Framework\TestCase;
 
-class PersonTest extends TestCase
+final class PersonTest extends TestCase
 {
     public function testFirstNameMaleReturns()
     {
@@ -76,7 +76,7 @@ class PersonTest extends TestCase
         $faker = new Generator();
         $faker->addProvider(new Person($faker));
         $faker->seed(1);
-        $this->assertEquals('3476157905', $faker->IndividualIdentificationNumber(new \DateTime('1995-03-04'), 'female'));
+        $this->assertEquals('3476157905', $faker->IndividualIdentificationNumber(new \DateTime('1995-03-04'), Person::GENDER_FEMALE));
     }
 
     public function testIndividualIdentificationNumberMale()
@@ -84,6 +84,14 @@ class PersonTest extends TestCase
         $faker = new Generator();
         $faker->addProvider(new Person($faker));
         $faker->seed(1);
-        $this->assertEquals('3476157911', $faker->IndividualIdentificationNumber(new \DateTime('1995-03-04'), 'male'));
+        $this->assertEquals('3476157911', $faker->IndividualIdentificationNumber(new \DateTime('1995-03-04'), Person::GENDER_MALE));
+    }
+
+    public function testReallyOldPersonIndividualIdentificationNumberLength()
+    {
+        $faker = new Generator();
+        $faker->addProvider(new Person($faker));
+        $faker->seed(1);
+        $this->assertEquals('0188900764', $faker->IndividualIdentificationNumber(new \DateTime('1905-03-04')));
     }
 }

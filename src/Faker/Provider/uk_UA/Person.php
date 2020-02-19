@@ -17,9 +17,9 @@ class Person extends \Faker\Provider\Person
     protected static $firstNameMale = array(
         'Євген', 'Адам', 'Олександр', 'Олексій', 'Анатолій', 'Андрій', 'Антон', 'Артем', 'Артур', 'Борис', 'Вадим', 'Валентин', 'Валерій',
         'Василь', 'Віталій', 'Володимир', 'Владислав', 'Геннадій', 'Георгій', 'Григорій', 'Данил', 'Данило', 'Денис', 'Дмитро',
-        'Євген', 'Іван', 'Ігор', 'Йосип', 'Кирил', 'Костянтин', 'Лев', 'Леонід', 'Максим', 'Мирослав', 'Михайло', 'Назар',
+        'Євгеній', 'Іван', 'Ігор', 'Йосип', 'Кирил', 'Костянтин', 'Лев', 'Леонід', 'Максим', 'Мирослав', 'Михайло', 'Назар',
         'Микита', 'Микола', 'Олег', 'Павло', 'Роман', 'Руслан', 'Сергій', 'Станіслав', 'Тарас', 'Тимофій', 'Федір',
-        'Юрій', 'Ярослав', 'Богдан', 'Болеслав', 'B\'ячеслав',' Bалерій',' Bсеволод',' Bіктор', 'Ілля'
+        'Юрій', 'Ярослав', 'Богдан', 'Болеслав', 'В\'ячеслав', 'Валерій', 'Всеволод', 'Віктор', 'Ілля'
     );
 
     protected static $firstNameFemale = array(
@@ -98,13 +98,15 @@ class Person extends \Faker\Provider\Person
     }
 
     /**
-     * Individual Identification Number:
+     * Individual Identification Number
+     *
+     * @param DateTime $birthdate Date when person is born
+     * @param string   $sex       'male' for male or 'female' for female
+     * 
      * @link https://en.wikipedia.org/wiki/National_identification_number#Ukraine
-     * Check digit calculation algorithm:
-     * @link https://github.com/iiifx-production/ukraine-identification-number
-     * @param  DateTime $birthdate
-     * @param  string   $sex 'male' for male or 'female' for female
-     * @return string   10 digit number, for example: 34713401358
+     * @link https://github.com/iiifx-production/ukraine-identification-number Check digit calculation algorithm
+     *
+     * @return string 10 digit number, for example: 34713401358
      */
     public static function individualIdentificationNumber($birthdate = null, $sex = null)
     {
@@ -112,7 +114,7 @@ class Person extends \Faker\Provider\Person
         $sex = $sex ?: self::randomElement(array(static::GENDER_MALE, static::GENDER_FEMALE));
 
         // real life examples shows that the birth date itself is also included in counting the days from 1900-01-01
-        $iid = $birthdate->diff(new \DateTime('1900-01-01'))->days + 1;
+        $iid = str_pad($birthdate->diff(new \DateTime('1900-01-01'))->days + 1, 5, '0', STR_PAD_LEFT);
         $iid = $iid . static::numerify('###');
         $iid = $iid . ($sex == static::GENDER_MALE ? static::numberBetween(0, 4) * 2 + 1 : static::numberBetween(0, 4) * 2);
 
