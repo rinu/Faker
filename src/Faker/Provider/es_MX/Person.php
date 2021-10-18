@@ -223,8 +223,7 @@ class Person extends \Faker\Provider\Person
         }
         $counterDigit = 0;
         for ($i = 1; $i <= strlen($curp); $i++) {
-            $counterDigit += (int)$curpVerifier {
-                ($i * 2 - 1)} * (19 - $i);
+            $counterDigit += (int)$curpVerifier[($i * 2 - 1)] * (19 - $i);
         }
         $digitModule = $counterDigit % 10;
         if ($digitModule > 0) {
