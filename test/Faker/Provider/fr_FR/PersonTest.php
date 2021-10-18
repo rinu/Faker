@@ -2,36 +2,34 @@
 
 namespace Faker\Test\Provider\fr_FR;
 
-use Faker\Generator;
 use Faker\Provider\fr_FR\Person;
-use PHPUnit\Framework\TestCase;
+use Faker\Test\TestCase;
 
+/**
+ * @group legacy
+ */
 final class PersonTest extends TestCase
 {
-    private $faker;
-
-    protected function setUp()
-    {
-        $faker = new Generator();
-        $faker->addProvider(new Person($faker));
-        $this->faker = $faker;
-    }
-
     public function testNIRReturnsTheRightGender()
     {
-		$nir = $this->faker->nir(\Faker\Provider\Person::GENDER_MALE);
-		$this->assertStringStartsWith('1', $nir);
+        $nir = $this->faker->nir(\Faker\Provider\Person::GENDER_MALE);
+        self::assertStringStartsWith('1', $nir);
     }
 
-	public function testNIRReturnsTheRightPattern()
+    public function testNIRReturnsTheRightPattern()
     {
-		$nir = $this->faker->nir;
-		$this->assertRegExp("/^[12]\d{5}[0-9A-B]\d{8}$/", $nir);
-	}
+        $nir = $this->faker->nir;
+        self::assertMatchesRegularExpression("/^[12]\d{5}[0-9A-B]\d{8}$/", $nir);
+    }
 
-	public function testNIRFormattedReturnsTheRightPattern()
+    public function testNIRFormattedReturnsTheRightPattern()
     {
-		$nir = $this->faker->nir(null, true);
-		$this->assertRegExp("/^[12]\s\d{2}\s\d{2}\s\d{1}[0-9A-B]\s\d{3}\s\d{3}\s\d{2}$/", $nir);
-	}
+        $nir = $this->faker->nir(null, true);
+        self::assertMatchesRegularExpression("/^[12]\s\d{2}\s\d{2}\s\d{1}[0-9A-B]\s\d{3}\s\d{3}\s\d{2}$/", $nir);
+    }
+
+    protected function getProviders(): iterable
+    {
+        yield new Person($this->faker);
+    }
 }

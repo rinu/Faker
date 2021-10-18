@@ -2,49 +2,43 @@
 
 namespace Faker\Test\Provider\en_PH;
 
-use Faker\Generator;
 use Faker\Provider\en_PH\Address;
-use PHPUnit\Framework\TestCase;
+use Faker\Test\TestCase;
 
+/**
+ * @group legacy
+ */
 final class AddressTest extends TestCase
 {
-
-    /**
-     * @var Faker\Generator
-     */
-    private $faker;
-
-    protected function setUp()
-    {
-      $faker = new Generator();
-      $faker->addProvider(new Address($faker));
-      $this->faker = $faker;
-    }
-
     public function testProvince()
     {
-      $province = $this->faker->province();
-      $this->assertNotEmpty($province);
-      $this->assertInternalType('string', $province);
+        $province = $this->faker->province();
+        self::assertNotEmpty($province);
+        self::assertIsString($province);
     }
 
     public function testCity()
     {
-      $city = $this->faker->city();
-      $this->assertNotEmpty($city);
-      $this->assertInternalType('string', $city);
+        $city = $this->faker->city();
+        self::assertNotEmpty($city);
+        self::assertIsString($city);
     }
 
     public function testMunicipality()
     {
-      $municipality = $this->faker->municipality();
-      $this->assertNotEmpty($municipality);
-      $this->assertInternalType('string', $municipality);
+        $municipality = $this->faker->municipality();
+        self::assertNotEmpty($municipality);
+        self::assertIsString($municipality);
     }
 
     public function testBarangay()
     {
-      $barangay = $this->faker->barangay();
-      $this->assertInternalType('string', $barangay);
+        $barangay = $this->faker->barangay();
+        self::assertIsString($barangay);
+    }
+
+    protected function getProviders(): iterable
+    {
+        yield new Address($this->faker);
     }
 }

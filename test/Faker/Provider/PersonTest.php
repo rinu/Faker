@@ -3,9 +3,11 @@
 namespace Faker\Test\Provider;
 
 use Faker\Provider\Person;
-use Faker\Generator;
-use PHPUnit\Framework\TestCase;
+use Faker\Test\TestCase;
 
+/**
+ * @group legacy
+ */
 final class PersonTest extends TestCase
 {
     /**
@@ -13,29 +15,27 @@ final class PersonTest extends TestCase
      */
     public function testFirstName($gender, $expected)
     {
-        $faker = new Generator();
-        $faker->addProvider(new Person($faker));
-        $this->assertContains($faker->firstName($gender), $expected);
+        self::assertContains($this->faker->firstName($gender), $expected);
     }
 
     public function firstNameProvider()
     {
-        return array(
-            array(null, array('John', 'Jane')),
-            array('foobar', array('John', 'Jane')),
-            array('male', array('John')),
-            array('female', array('Jane')),
-        );
+        return [
+            [null, ['John', 'Jane']],
+            ['foobar', ['John', 'Jane']],
+            ['male', ['John']],
+            ['female', ['Jane']],
+        ];
     }
 
     public function testFirstNameMale()
     {
-        $this->assertContains(Person::firstNameMale(), array('John'));
+        self::assertContains(Person::firstNameMale(), ['John']);
     }
 
     public function testFirstNameFemale()
     {
-        $this->assertContains(Person::firstNameFemale(), array('Jane'));
+        self::assertContains(Person::firstNameFemale(), ['Jane']);
     }
 
     /**
@@ -43,45 +43,44 @@ final class PersonTest extends TestCase
      */
     public function testTitle($gender, $expected)
     {
-        $faker = new Generator();
-        $faker->addProvider(new Person($faker));
-        $this->assertContains($faker->title($gender), $expected);
+        self::assertContains($this->faker->title($gender), $expected);
     }
 
     public function titleProvider()
     {
-        return array(
-            array(null, array('Mr.', 'Mrs.', 'Ms.', 'Miss', 'Dr.', 'Prof.')),
-            array('foobar', array('Mr.', 'Mrs.', 'Ms.', 'Miss', 'Dr.', 'Prof.')),
-            array('male', array('Mr.', 'Dr.', 'Prof.')),
-            array('female', array('Mrs.', 'Ms.', 'Miss', 'Dr.', 'Prof.')),
-        );
+        return [
+            [null, ['Mr.', 'Mrs.', 'Ms.', 'Miss', 'Dr.', 'Prof.']],
+            ['foobar', ['Mr.', 'Mrs.', 'Ms.', 'Miss', 'Dr.', 'Prof.']],
+            ['male', ['Mr.', 'Dr.', 'Prof.']],
+            ['female', ['Mrs.', 'Ms.', 'Miss', 'Dr.', 'Prof.']],
+        ];
     }
 
     public function testTitleMale()
     {
-        $this->assertContains(Person::titleMale(), array('Mr.', 'Dr.', 'Prof.'));
+        self::assertContains(Person::titleMale(), ['Mr.', 'Dr.', 'Prof.']);
     }
 
     public function testTitleFemale()
     {
-        $this->assertContains(Person::titleFemale(), array('Mrs.', 'Ms.', 'Miss', 'Dr.', 'Prof.'));
+        self::assertContains(Person::titleFemale(), ['Mrs.', 'Ms.', 'Miss', 'Dr.', 'Prof.']);
     }
 
     public function testLastNameReturnsDoe()
     {
-        $faker = new Generator();
-        $faker->addProvider(new Person($faker));
-        $this->assertEquals($faker->lastName(), 'Doe');
+        self::assertEquals($this->faker->lastName(), 'Doe');
     }
 
     public function testNameReturnsFirstNameAndLastName()
     {
-        $faker = new Generator();
-        $faker->addProvider(new Person($faker));
-        $this->assertContains($faker->name(), array('John Doe', 'Jane Doe'));
-        $this->assertContains($faker->name('foobar'), array('John Doe', 'Jane Doe'));
-        $this->assertContains($faker->name('male'), array('John Doe'));
-        $this->assertContains($faker->name('female'), array('Jane Doe'));
+        self::assertContains($this->faker->name(), ['John Doe', 'Jane Doe']);
+        self::assertContains($this->faker->name('foobar'), ['John Doe', 'Jane Doe']);
+        self::assertContains($this->faker->name('male'), ['John Doe']);
+        self::assertContains($this->faker->name('female'), ['Jane Doe']);
+    }
+
+    protected function getProviders(): iterable
+    {
+        yield new Person($this->faker);
     }
 }

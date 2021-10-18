@@ -2,23 +2,11 @@
 
 namespace Faker\Test\Provider\es_AR;
 
-use Faker\Generator;
 use Faker\Provider\es_AR\Payment;
+use Faker\Test\TestCase;
 
-class PaymentTest extends \PHPUnit_Framework_TestCase
+final class PaymentTest extends TestCase
 {
-    /**
-     * @var Generator
-     */
-    private $faker;
-
-    public function setUp()
-    {
-        $faker = new Generator();
-        $faker->addProvider(new Payment($faker));
-        $this->faker = $faker;
-    }
-
     public function testValidCbu()
     {
         $cbu = $this->faker->cbu();
@@ -32,13 +20,13 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
      * @param string $cbu
      * @return     boolean  True if valid, False otherwise.
      */
-    private static function isValid($cbu)
+    private function isValid($cbu)
     {
         // Estrictamente sólo 22 números
         if (!preg_match('/[0-9]{22}/', $cbu)) {
             return false;
         }
-        
+
         $arr = str_split($cbu);
         if ($arr[7] != self::getDigitoVerificador($arr, 0, 6)) {
             return false;
@@ -46,7 +34,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         if ($arr[21] != self::getDigitoVerificador($arr, 8, 20)) {
             return false;
         }
-        
+
         return true;
     }
 
@@ -70,7 +58,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         }
         return (10 - $suma % 10) % 10;
     }
-    
+
     /**
      * @param string $cbu
      * @return string
@@ -78,5 +66,10 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     public static function getBankId($cbu)
     {
         return substr($cbu, 0, 3);
+    }
+
+    protected function getProviders(): iterable
+    {
+        yield new Payment($this->faker);
     }
 }

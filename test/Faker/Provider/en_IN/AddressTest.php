@@ -2,56 +2,47 @@
 
 namespace Faker\Provider\en_IN;
 
-use Faker\Generator;
-use Faker\Provider\en_IN\Address;
-use PHPUnit\Framework\TestCase;
+use Faker\Test\TestCase;
 
+/**
+ * @group legacy
+ */
 final class AddressTest extends TestCase
 {
+    public function testCity()
+    {
+        $city = $this->faker->city();
+        self::assertNotEmpty($city);
+        self::assertIsString($city);
+        self::assertMatchesRegularExpression('/[A-Z][a-z]+/', $city);
+    }
 
-  /**
-   * @var Faker\Generator
-   */
-  private $faker;
+    public function testCountry()
+    {
+        $country = $this->faker->country();
+        self::assertNotEmpty($country);
+        self::assertIsString($country);
+        self::assertMatchesRegularExpression('/[A-Z][a-z]+/', $country);
+    }
 
-  protected function setUp()
-  {
-    $faker = new Generator();
-    $faker->addProvider(new Address($faker));
-    $this->faker = $faker;
-  }
+    public function testLocalityName()
+    {
+        $localityName = $this->faker->localityName();
+        self::assertNotEmpty($localityName);
+        self::assertIsString($localityName);
+        self::assertMatchesRegularExpression('/[A-Z][a-z]+/', $localityName);
+    }
 
-  public function testCity()
-  {
-    $city = $this->faker->city();
-    $this->assertNotEmpty($city);
-    $this->assertInternalType('string', $city);
-    $this->assertRegExp('/[A-Z][a-z]+/', $city);
-  }
+    public function testAreaSuffix()
+    {
+        $areaSuffix = $this->faker->areaSuffix();
+        self::assertNotEmpty($areaSuffix);
+        self::assertIsString($areaSuffix);
+        self::assertMatchesRegularExpression('/[A-Z][a-z]+/', $areaSuffix);
+    }
 
-  public function testCountry()
-  {
-    $country = $this->faker->country();
-    $this->assertNotEmpty($country);
-    $this->assertInternalType('string', $country);
-    $this->assertRegExp('/[A-Z][a-z]+/', $country);
-  }
-
-  public function testLocalityName()
-  {
-    $localityName = $this->faker->localityName();
-    $this->assertNotEmpty($localityName);
-    $this->assertInternalType('string', $localityName);
-    $this->assertRegExp('/[A-Z][a-z]+/', $localityName);
-  }
-
-  public function testAreaSuffix()
-  {
-    $areaSuffix = $this->faker->areaSuffix();
-    $this->assertNotEmpty($areaSuffix);
-    $this->assertInternalType('string', $areaSuffix);
-    $this->assertRegExp('/[A-Z][a-z]+/', $areaSuffix);
-  }
+    protected function getProviders(): iterable
+    {
+        yield new Address($this->faker);
+    }
 }
-
-?>

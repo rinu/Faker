@@ -1,21 +1,40 @@
-.PHONY: build coverage fix help sniff test
+.PHONY: build
+build: cs static test ## Runs cs, static, and test targets
 
+# https://www.gnu.org/software/make/manual/html_node/Force-Targets.html
+always:
+
+.PHONY: help
 help:
 	@grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
-build: fix test ## Runs fix and test targets
+.PHONY: cs
+cs: vendor ## Fixes coding standard issues with php-cs-fixer
+	vendor/bin/php-cs-fixer fix --diff --verbose
 
-coverage: vendor/autoload.php ## Collects coverage with phpunit
-	vendor/bin/phpunit --coverage-text --coverage-clover=.build/logs/clover.xml
+.PHONY: coverage
+coverage: vendor ## Collects coverage with phpunit
+	vendor/bin/simple-phpunit --coverage-text --coverage-clover=.build/logs/clover.xml
 
-fix: vendor/autoload.php ## Fixes code style issues with phpcbf
-	vendor/bin/phpcbf --standard=PSR2 src
+.PHONY: test
+test: vendor ## Runs tests with phpunit
+	vendor/bin/simple-phpunit
 
-sniff: vendor/autoload.php ## Detects code style issues with phpcs
-	vendor/bin/phpcs --standard=PSR2 src -n
+.PHONY: static
+static: vendor ## Runs static analyzers
+	vendor/bin/phpstan
+	vendor/bin/psalm
 
-test: vendor/autoload.php ## Runs tests with phpunit
-	vendor/bin/phpunit
+.PHONY: baseline
+baseline: vendor ## Generate baseline files
+	vendor/bin/phpstan --generate-baseline
+	vendor/bin/psalm --update-baseline
 
-vendor/autoload.php:
-	composer install --no-interaction --prefer-dist
+.PHONY: clean
+clean:   ## Cleans up build and vendor files
+	rm -rf vendor composer.lock .build
+
+vendor: always
+	composer update --no-interaction
+	composer bin all install --no-interaction
+	vendor/bin/simple-phpunit install

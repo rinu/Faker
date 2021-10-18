@@ -2,32 +2,30 @@
 
 namespace Faker\Test\Provider\nl_NL;
 
-use Faker\Generator;
 use Faker\Provider\nl_NL\Person;
-use PHPUnit\Framework\TestCase;
+use Faker\Test\TestCase;
 
+/**
+ * @group legacy
+ */
 final class PersonTest extends TestCase
 {
-    private $faker;
-
-    protected function setUp()
-    {
-        $faker = new Generator();
-        $faker->addProvider(new Person($faker));
-        $this->faker = $faker;
-    }
-
     public function testGenerateValidIdNumber()
     {
         $idNumber = $this->faker->idNumber();
-        $this->assertEquals(9, strlen($idNumber));
-
+        self::assertEquals(9, strlen($idNumber));
 
         $sum = -1 * $idNumber % 10;
-        for ($multiplier = 2; $idNumber > 0; $multiplier++) {
-            $val = ($idNumber /= 10) % 10;
+
+        for ($multiplier = 2; $idNumber > 0; ++$multiplier) {
+            $val = (int) ($idNumber /= 10) % 10;
             $sum += $multiplier * $val;
         }
-        $this->assertTrue($sum != 0 && $sum % 11 == 0);
+        self::assertTrue($sum != 0 && $sum % 11 == 0);
+    }
+
+    protected function getProviders(): iterable
+    {
+        yield new Person($this->faker);
     }
 }

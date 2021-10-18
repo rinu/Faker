@@ -1,35 +1,20 @@
 <?php
 
-namespace Faker\Provider\ng_NG;
+namespace Faker\Provider\en_NG;
 
-use Faker\Generator;
-use Faker\Provider\en_NG\Address;
-use PHPUnit\Framework\TestCase;
+use Faker\Test\TestCase;
 
+/**
+ * @group legacy
+ */
 final class AddressTest extends TestCase
 {
-
-    /**
-     * @var Generator
-     */
-    private $faker;
-
-    protected function setUp()
-    {
-        $faker = new Generator();
-        $faker->addProvider(new Address($faker));
-        $this->faker = $faker;
-    }
-
-    /**
-     *
-     */
     public function testPostcodeIsNotEmptyAndIsValid()
     {
         $postcode = $this->faker->postcode();
 
-        $this->assertNotEmpty($postcode);
-        $this->assertInternalType('string', $postcode);
+        self::assertNotEmpty($postcode);
+        self::assertIsString($postcode);
     }
 
     /**
@@ -39,8 +24,8 @@ final class AddressTest extends TestCase
     {
         $county = $this->faker->county;
 
-        $this->assertNotEmpty($county);
-        $this->assertInternalType('string', $county);
+        self::assertNotEmpty($county);
+        self::assertIsString($county);
     }
 
     /**
@@ -50,8 +35,12 @@ final class AddressTest extends TestCase
     {
         $region = $this->faker->region;
 
-        $this->assertNotEmpty($region);
-        $this->assertInternalType('string', $region);
+        self::assertNotEmpty($region);
+        self::assertIsString($region);
     }
 
+    protected function getProviders(): iterable
+    {
+        yield new Address($this->faker);
+    }
 }

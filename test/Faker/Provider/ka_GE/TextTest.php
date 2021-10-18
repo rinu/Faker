@@ -2,18 +2,22 @@
 
 namespace Faker\Test\Provider\ka_GE;
 
-use PHPUnit\Framework\TestCase;
+use Faker\Test\TestCase;
 
+/**
+ * @group legacy
+ */
 final class TextTest extends TestCase
 {
     private $textClass;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->textClass = new \ReflectionClass('Faker\Provider\el_GR\Text');
     }
 
-    protected function getMethod($name) {
+    protected function getMethod($name)
+    {
         $method = $this->textClass->getMethod($name);
 
         $method->setAccessible(true);
@@ -21,36 +25,36 @@ final class TextTest extends TestCase
         return $method;
     }
 
-    function testItShouldAppendEndPunctToTheEndOfString()
+    public function testItShouldAppendEndPunctToTheEndOfString()
     {
-        $this->assertSame(
+        self::assertSame(
             'ჭეშმარიტია. ჩვენც ისე.',
-            $this->getMethod('appendEnd')->invokeArgs(null, array('ჭეშმარიტია. ჩვენც ისე '))
+            $this->getMethod('appendEnd')->invokeArgs(null, ['ჭეშმარიტია. ჩვენც ისე '])
         );
 
-        $this->assertSame(
+        self::assertSame(
             'ჭეშმარიტია. ჩვენც ისე.',
-            $this->getMethod('appendEnd')->invokeArgs(null, array('ჭეშმარიტია. ჩვენც ისე— '))
+            $this->getMethod('appendEnd')->invokeArgs(null, ['ჭეშმარიტია. ჩვენც ისე— '])
         );
 
-        $this->assertSame(
+        self::assertSame(
             'ჭეშმარიტია. ჩვენც ისე.',
-            $this->getMethod('appendEnd')->invokeArgs(null, array('ჭეშმარიტია. ჩვენც ისე,  '))
+            $this->getMethod('appendEnd')->invokeArgs(null, ['ჭეშმარიტია. ჩვენც ისე,  '])
         );
 
-        $this->assertSame(
+        self::assertSame(
             'ჭეშმარიტია. ჩვენც ისე!.',
-            $this->getMethod('appendEnd')->invokeArgs(null, array('ჭეშმარიტია. ჩვენც ისე! '))
+            $this->getMethod('appendEnd')->invokeArgs(null, ['ჭეშმარიტია. ჩვენც ისე! '])
         );
 
-        $this->assertSame(
+        self::assertSame(
             'ჭეშმარიტია. ჩვენც ისე.',
-            $this->getMethod('appendEnd')->invokeArgs(null, array('ჭეშმარიტია. ჩვენც ისე; '))
+            $this->getMethod('appendEnd')->invokeArgs(null, ['ჭეშმარიტია. ჩვენც ისე; '])
         );
 
-        $this->assertSame(
+        self::assertSame(
             'ჭეშმარიტია. ჩვენც ისე.',
-            $this->getMethod('appendEnd')->invokeArgs(null, array('ჭეშმარიტია. ჩვენც ისე: '))
+            $this->getMethod('appendEnd')->invokeArgs(null, ['ჭეშმარიტია. ჩვენც ისე: '])
         );
     }
 }

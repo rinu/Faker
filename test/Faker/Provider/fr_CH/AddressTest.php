@@ -2,69 +2,53 @@
 
 namespace Faker\Test\Provider\fr_CH;
 
-use Faker\Generator;
 use Faker\Provider\fr_CH\Address;
 use Faker\Provider\fr_CH\Person;
-use PHPUnit\Framework\TestCase;
+use Faker\Test\TestCase;
 
+/**
+ * @group legacy
+ */
 final class AddressTest extends TestCase
 {
-
-    /**
-     * @var Faker\Generator
-     */
-    private $faker;
-
-    protected function setUp()
-    {
-        $faker = new Generator();
-        $faker->addProvider(new Address($faker));
-        $faker->addProvider(new Person($faker));
-        $this->faker = $faker;
-    }
-
-    /**
-     * @test
-     */
-    public function canton ()
+    public function testCanton()
     {
         $canton = $this->faker->canton();
-        $this->assertInternalType('array', $canton);
-        $this->assertCount(1, $canton);
+        self::assertIsArray($canton);
+        self::assertCount(1, $canton);
 
-        foreach ($canton as $cantonShort => $cantonName){
-            $this->assertInternalType('string', $cantonShort);
-            $this->assertEquals(2, strlen($cantonShort));
-            $this->assertInternalType('string', $cantonName);
-            $this->assertGreaterThan(2, strlen($cantonName));
+        foreach ($canton as $cantonShort => $cantonName) {
+            self::assertIsString($cantonShort);
+            self::assertEquals(2, strlen($cantonShort));
+            self::assertIsString($cantonName);
+            self::assertGreaterThan(2, strlen($cantonName));
         }
     }
 
-    /**
-     * @test
-     */
-    public function cantonName ()
+    public function testCantonName()
     {
         $cantonName = $this->faker->cantonName();
-        $this->assertInternalType('string', $cantonName);
-        $this->assertGreaterThan(2, strlen($cantonName));
+        self::assertIsString($cantonName);
+        self::assertGreaterThan(2, strlen($cantonName));
     }
 
-    /**
-     * @test
-     */
-    public function cantonShort ()
+    public function testCantonShort()
     {
         $cantonShort = $this->faker->cantonShort();
-        $this->assertInternalType('string', $cantonShort);
-        $this->assertEquals(2, strlen($cantonShort));
+        self::assertIsString($cantonShort);
+        self::assertEquals(2, strlen($cantonShort));
     }
 
-    /**
-     * @test
-     */
-    public function address (){
+    public function testAddress()
+    {
         $address = $this->faker->address();
-        $this->assertInternalType('string', $address);
+        self::assertIsString($address);
+    }
+
+    protected function getProviders(): iterable
+    {
+        yield new Address($this->faker);
+
+        yield new Person($this->faker);
     }
 }

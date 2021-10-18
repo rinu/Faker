@@ -2,45 +2,46 @@
 
 namespace Faker\Test\Provider;
 
-use Faker\Generator;
+use Faker\Calculator\Ean;
+use Faker\Calculator\Isbn;
 use Faker\Provider\Barcode;
-use PHPUnit\Framework\TestCase;
+use Faker\Test\TestCase;
 
+/**
+ * @group legacy
+ */
 final class BarcodeTest extends TestCase
 {
-    private $faker;
-
-    protected function setUp()
-    {
-        $faker = new Generator();
-        $faker->addProvider(new Barcode($faker));
-        $faker->seed(0);
-        $this->faker = $faker;
-    }
-
     public function testEan8()
     {
         $code = $this->faker->ean8();
-        $this->assertRegExp('/^\d{8}$/i', $code);
-        $codeWithoutChecksum = substr($code, 0, -1);
-        $checksum = substr($code, -1);
-        $this->assertEquals(TestableBarcode::eanChecksum($codeWithoutChecksum), $checksum);
+        self::assertMatchesRegularExpression('/^\d{8}$/i', $code);
+        self::assertTrue(Ean::isValid($code));
     }
 
     public function testEan13()
     {
         $code = $this->faker->ean13();
-        $this->assertRegExp('/^\d{13}$/i', $code);
-        $codeWithoutChecksum = substr($code, 0, -1);
-        $checksum = substr($code, -1);
-        $this->assertEquals(TestableBarcode::eanChecksum($codeWithoutChecksum), $checksum);
+        self::assertMatchesRegularExpression('/^\d{13}$/i', $code);
+        self::assertTrue(Ean::isValid($code));
     }
-}
 
-final class TestableBarcode extends Barcode
-{
-    public static function eanChecksum($input)
+    public function testIsbn10(): void
     {
-        return parent::eanChecksum($input);
+        $code = $this->faker->isbn10();
+        self::assertMatchesRegularExpression('/^\d{9}[0-9X]$/i', $code);
+        self::assertTrue(Isbn::isValid($code));
+    }
+
+    public function testIsbn13(): void
+    {
+        $code = $this->faker->isbn13();
+        self::assertMatchesRegularExpression('/^\d{13}$/i', $code);
+        self::assertTrue(Ean::isValid($code));
+    }
+
+    protected function getProviders(): iterable
+    {
+        yield new Barcode($this->faker);
     }
 }

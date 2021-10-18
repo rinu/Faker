@@ -2,46 +2,44 @@
 
 namespace Faker\Test\Provider;
 
-use Faker\Generator;
 use Faker\Provider\Address;
-use PHPUnit\Framework\TestCase;
+use Faker\Test\TestCase;
 
+/**
+ * @group legacy
+ */
 final class AddressTest extends TestCase
 {
-    private $faker;
-
-    protected function setUp()
-    {
-        $faker = new Generator();
-        $faker->addProvider(new Address($faker));
-        $this->faker = $faker;
-    }
-
     public function testLatitude()
     {
         $latitude = $this->faker->latitude();
-        $this->assertInternalType('float', $latitude);
-        $this->assertGreaterThanOrEqual(-90, $latitude);
-        $this->assertLessThanOrEqual(90, $latitude);
+        self::assertIsFloat($latitude);
+        self::assertGreaterThanOrEqual(-90, $latitude);
+        self::assertLessThanOrEqual(90, $latitude);
     }
 
     public function testLongitude()
     {
         $longitude = $this->faker->longitude();
-        $this->assertInternalType('float', $longitude);
-        $this->assertGreaterThanOrEqual(-180, $longitude);
-        $this->assertLessThanOrEqual(180, $longitude);
+        self::assertIsFloat($longitude);
+        self::assertGreaterThanOrEqual(-180, $longitude);
+        self::assertLessThanOrEqual(180, $longitude);
     }
 
     public function testCoordinate()
     {
         $coordinate = $this->faker->localCoordinates();
-        $this->assertInternalType('array', $coordinate);
-        $this->assertInternalType('float', $coordinate['latitude']);
-        $this->assertGreaterThanOrEqual(-90, $coordinate['latitude']);
-        $this->assertLessThanOrEqual(90, $coordinate['latitude']);
-        $this->assertInternalType('float', $coordinate['longitude']);
-        $this->assertGreaterThanOrEqual(-180, $coordinate['longitude']);
-        $this->assertLessThanOrEqual(180, $coordinate['longitude']);
+        self::assertIsArray($coordinate);
+        self::assertIsFloat($coordinate['latitude']);
+        self::assertGreaterThanOrEqual(-90, $coordinate['latitude']);
+        self::assertLessThanOrEqual(90, $coordinate['latitude']);
+        self::assertIsFloat($coordinate['longitude']);
+        self::assertGreaterThanOrEqual(-180, $coordinate['longitude']);
+        self::assertLessThanOrEqual(180, $coordinate['longitude']);
+    }
+
+    protected function getProviders(): iterable
+    {
+        yield new Address($this->faker);
     }
 }

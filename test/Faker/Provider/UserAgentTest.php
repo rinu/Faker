@@ -3,37 +3,40 @@
 namespace Faker\Test\Provider;
 
 use Faker\Provider\UserAgent;
-use PHPUnit\Framework\TestCase;
+use Faker\Test\TestCase;
 
+/**
+ * @group legacy
+ */
 final class UserAgentTest extends TestCase
 {
     public function testRandomUserAgent()
     {
-        $this->assertNotNull(UserAgent::userAgent());
+        self::assertNotNull(UserAgent::userAgent());
     }
 
     public function testFirefoxUserAgent()
     {
-        $this->stringContains(' Firefox/', UserAgent::firefox());
+        self::assertStringContainsString(' Firefox/', UserAgent::firefox());
     }
 
     public function testSafariUserAgent()
     {
-        $this->stringContains('Safari/', UserAgent::safari());
+        self::assertStringContainsString('Safari/', UserAgent::safari());
     }
 
     public function testInternetExplorerUserAgent()
     {
-        $this->assertStringStartsWith('Mozilla/5.0 (compatible; MSIE ', UserAgent::internetExplorer());
+        self::assertStringStartsWith('Mozilla/5.0 (compatible; MSIE ', UserAgent::internetExplorer());
     }
 
     public function testOperaUserAgent()
     {
-        $this->assertStringStartsWith('Opera/', UserAgent::opera());
+        self::assertStringStartsWith('Opera/', UserAgent::opera());
     }
 
     public function testChromeUserAgent()
     {
-        $this->stringContains('(KHTML, like Gecko) Chrome/', UserAgent::chrome());
+        self::assertStringContainsString('(KHTML, like Gecko) Chrome/', UserAgent::chrome());
     }
 }

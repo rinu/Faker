@@ -2,29 +2,28 @@
 
 namespace Faker\Test\Provider\bn_BD;
 
-use Faker\Generator;
 use Faker\Provider\bn_BD\Person;
-use PHPUnit\Framework\TestCase;
+use Faker\Test\TestCase;
 
+/**
+ * @group legacy
+ */
 final class PersonTest extends TestCase
 {
-    protected function setUp()
-    {
-        $faker = new Generator();
-        $faker->addProvider(new Person($faker));
-        $this->faker = $faker;
-    }
-
     public function testIfFirstNameMaleCanReturnData()
     {
         $firstNameMale = $this->faker->firstNameMale();
-        $this->assertNotEmpty($firstNameMale);
+        self::assertNotEmpty($firstNameMale);
     }
 
     public function testIfFirstNameFemaleCanReturnData()
     {
         $firstNameFemale = $this->faker->firstNameFemale();
-        $this->assertNotEmpty($firstNameFemale);
+        self::assertNotEmpty($firstNameFemale);
+    }
+
+    protected function getProviders(): iterable
+    {
+        yield new Person($this->faker);
     }
 }
-?>

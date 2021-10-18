@@ -2,27 +2,14 @@
 
 namespace Faker\Test\Provider\de_AT;
 
-
-use Faker\Generator;
 use Faker\Provider\de_AT\Address;
-use PHPUnit\Framework\TestCase;
+use Faker\Test\TestCase;
 
+/**
+ * @group legacy
+ */
 final class AddressTest extends TestCase
 {
-    /**
-     * @var Generator
-     */
-    private $faker;
-
-    protected function setUp()
-    {
-        $faker = new Generator();
-
-        $faker->addProvider(new Address($faker));
-
-        $this->faker = $faker;
-    }
-
     /**
      * @see https://en.wikipedia.org/wiki/List_of_postal_codes_in_Austria
      */
@@ -30,6 +17,11 @@ final class AddressTest extends TestCase
     {
         $postcode = $this->faker->postcode;
 
-        $this->assertRegExp('/^[1-9]\d{3}$/', $postcode);
+        self::assertMatchesRegularExpression('/^[1-9]\d{3}$/', $postcode);
+    }
+
+    protected function getProviders(): iterable
+    {
+        yield new Address($this->faker);
     }
 }

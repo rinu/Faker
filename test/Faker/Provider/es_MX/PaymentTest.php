@@ -2,22 +2,14 @@
 
 namespace Faker\Test\Provider\es_MX;
 
-use Faker\Generator;
 use Faker\Provider\es_MX\Payment;
+use Faker\Test\TestCase;
 
-class PaymentTest extends \PHPUnit_Framework_TestCase
+class PaymentTest extends TestCase
 {
-    public function setUp()
-    {
-        $faker = new Generator();
-        $faker->seed(1);
-        $faker->addProvider(new Payment($faker));
-        $this->faker = $faker;
-    }
-
     public function testClabe()
     {
-        $clabe = $this->faker->clabe;
+        $clabe = $this->faker->clabe();
         $this->assertTrue($this->validateClabe($clabe));
     }
 
@@ -34,5 +26,10 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
 
         $product = array_sum($weighted) % 10;
         return $crc == (10 - $product);
+    }
+
+    protected function getProviders(): iterable
+    {
+        yield new Payment($this->faker);
     }
 }

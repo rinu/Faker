@@ -2,48 +2,39 @@
 
 namespace Faker\Provider\en_AU;
 
-use Faker\Generator;
-use Faker\Provider\en_AU\Address;
-use PHPUnit\Framework\TestCase;
+use Faker\Test\TestCase;
 
+/**
+ * @group legacy
+ */
 final class AddressTest extends TestCase
 {
+    public function testCityPrefix()
+    {
+        $cityPrefix = $this->faker->cityPrefix();
+        self::assertNotEmpty($cityPrefix);
+        self::assertIsString($cityPrefix);
+        self::assertMatchesRegularExpression('/[A-Z][a-z]+/', $cityPrefix);
+    }
 
-  /**
-   * @var Faker\Generator
-   */
-  private $faker;
+    public function testStreetSuffix()
+    {
+        $streetSuffix = $this->faker->streetSuffix();
+        self::assertNotEmpty($streetSuffix);
+        self::assertIsString($streetSuffix);
+        self::assertMatchesRegularExpression('/[A-Z][a-z]+/', $streetSuffix);
+    }
 
-  protected function setUp()
-  {
-    $faker = new Generator();
-    $faker->addProvider(new Address($faker));
-    $this->faker = $faker;
-  }
+    public function testState()
+    {
+        $state = $this->faker->state();
+        self::assertNotEmpty($state);
+        self::assertIsString($state);
+        self::assertMatchesRegularExpression('/[A-Z][a-z]+/', $state);
+    }
 
-  public function testCityPrefix()
-  {
-    $cityPrefix = $this->faker->cityPrefix();
-    $this->assertNotEmpty($cityPrefix);
-    $this->assertInternalType('string', $cityPrefix);
-    $this->assertRegExp('/[A-Z][a-z]+/', $cityPrefix);
-  }
-
-  public function testStreetSuffix()
-  {
-    $streetSuffix = $this->faker->streetSuffix();
-    $this->assertNotEmpty($streetSuffix);
-    $this->assertInternalType('string', $streetSuffix);
-    $this->assertRegExp('/[A-Z][a-z]+/', $streetSuffix);
-  }
-
-  public function testState()
-  {
-    $state = $this->faker->state();
-    $this->assertNotEmpty($state);
-    $this->assertInternalType('string', $state);
-    $this->assertRegExp('/[A-Z][a-z]+/', $state);
-  }
+    protected function getProviders(): iterable
+    {
+        yield new Address($this->faker);
+    }
 }
-
-?>

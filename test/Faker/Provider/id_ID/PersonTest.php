@@ -2,17 +2,19 @@
 
 namespace Faker\Test\Provider\id_ID;
 
-use Faker\Generator;
 use Faker\Provider\DateTime;
 use Faker\Provider\id_ID\Person;
-use PHPUnit\Framework\TestCase;
+use Faker\Test\TestCase;
 
+/**
+ * @group legacy
+ */
 final class PersonTest extends TestCase
 {
     /**
      * @see Person::$birthPlaceCode
      */
-    protected static $birthPlaceCode = array(
+    protected static $birthPlaceCode = [
         '1101', '1102', '1103', '1104', '1105', '1106', '1107', '1108', '1109', '1110', '1111', '1112', '1113', '1114', '1115', '1116',
         '1117', '1118', '1171', '1172', '1173', '1174', '1175', '1201', '1202', '1203', '1204', '1205', '1206', '1207', '1208', '1209',
         '1210', '1211', '1212', '1213', '1214', '1215', '1216', '1217', '1218', '1219', '1220', '1221', '1222', '1223', '1224', '1225',
@@ -45,44 +47,43 @@ final class PersonTest extends TestCase
         '8207', '8208', '8271', '8272', '9101', '9102', '9103', '9104', '9105', '9106', '9107', '9108', '9109', '9110', '9111', '9112',
         '9113', '9114', '9115', '9116', '9117', '9118', '9119', '9120', '9121', '9122', '9123', '9124', '9125', '9126', '9127', '9128',
         '9171', '9201', '9202', '9203', '9204', '9205', '9206', '9207', '9208', '9209', '9210', '9211', '9212', '9271',
-    );
-
-    protected function setUp()
-    {
-        $faker = new Generator();
-        $faker->addProvider(new Person($faker));
-        $faker->addProvider(new DateTime($faker));
-        $this->faker = $faker;
-    }
+    ];
 
     public function testIfFirstNameMaleCanReturnData()
     {
         $firstNameMale = $this->faker->firstNameMale();
-        $this->assertNotEmpty($firstNameMale);
+        self::assertNotEmpty($firstNameMale);
     }
 
     public function testIfLastNameMaleCanReturnData()
     {
         $lastNameMale = $this->faker->lastNameMale();
-        $this->assertNotEmpty($lastNameMale);
+        self::assertNotEmpty($lastNameMale);
     }
 
     public function testIfFirstNameFemaleCanReturnData()
     {
         $firstNameFemale = $this->faker->firstNameFemale();
-        $this->assertNotEmpty($firstNameFemale);
+        self::assertNotEmpty($firstNameFemale);
     }
 
     public function testIfLastNameFemaleCanReturnData()
     {
         $lastNameFemale = $this->faker->lastNameFemale();
-        $this->assertNotEmpty($lastNameFemale);
+        self::assertNotEmpty($lastNameFemale);
     }
 
     public function testNikContainsBirthPlace()
     {
         $nik = $this->faker->nik();
 
-        $this->assertContains(substr($nik, 0, 4), static::$birthPlaceCode);
+        self::assertContains(substr($nik, 0, 4), static::$birthPlaceCode);
+    }
+
+    protected function getProviders(): iterable
+    {
+        yield new Person($this->faker);
+
+        yield new DateTime($this->faker);
     }
 }

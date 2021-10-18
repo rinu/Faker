@@ -2,27 +2,19 @@
 
 namespace Faker\Test\Provider\es_MX;
 
-use Faker\Generator;
+use Faker\Test\TestCase;
 
-class PersonTest extends \PHPUnit_Framework_TestCase
+class PersonTest extends TestCase
 {
-    public function setUp()
-    {
-        $faker = new Generator();
-        $faker->seed(1);
-        $faker->addProvider(new Person($faker));
-        $this->faker = $faker;
-    }
-
     public function testCurp()
     {
-        $curp = $this->faker->curp;
+        $curp = $this->faker->curp();
         $this->assertTrue(static::dni($curp));
     }
 
     public function testRFC()
     {
-        $rfc = $this->faker->personRfc;
+        $rfc = $this->faker->personRfc();
         $this->assertRegExp('/^[a-zA-Z]{3,4}[0-9]{2}[0-1]{1}[0-9]{1}[0-3]{1}[0-9]{1}[a-zA-Z0-9]{3}$/', $rfc);
     }
 
@@ -63,7 +55,7 @@ class PersonTest extends \PHPUnit_Framework_TestCase
     {
         $lastName = $this->faker->fullLastName();
 
-        $this->assertContains(' ', $lastName);
+        $this->assertStringContainsString(' ', $lastName);
     }
 
     public function testRemoveAccents()
@@ -219,5 +211,10 @@ class PersonTest extends \PHPUnit_Framework_TestCase
                 return true;
         }
         return false;
+    }
+
+    protected function getProviders(): iterable
+    {
+        yield new Person($this->faker);
     }
 }

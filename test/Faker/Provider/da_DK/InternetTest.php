@@ -2,32 +2,28 @@
 
 namespace Faker\Test\Provider\da_DK;
 
-use Faker\Generator;
-use Faker\Provider\da_DK\Person;
-use Faker\Provider\da_DK\Internet;
 use Faker\Provider\da_DK\Company;
-use PHPUnit\Framework\TestCase;
+use Faker\Provider\da_DK\Internet;
+use Faker\Provider\da_DK\Person;
+use Faker\Test\TestCase;
 
+/**
+ * @group legacy
+ */
 final class InternetTest extends TestCase
 {
-
-    /**
-     * @var Generator
-     */
-    private $faker;
-
-    protected function setUp()
-    {
-        $faker = new Generator();
-        $faker->addProvider(new Person($faker));
-        $faker->addProvider(new Internet($faker));
-        $faker->addProvider(new Company($faker));
-        $this->faker = $faker;
-    }
-
     public function testEmailIsValid()
     {
         $email = $this->faker->email();
-        $this->assertNotFalse(filter_var($email, FILTER_VALIDATE_EMAIL));
+        self::assertNotFalse(filter_var($email, FILTER_VALIDATE_EMAIL));
+    }
+
+    protected function getProviders(): iterable
+    {
+        yield new Person($this->faker);
+
+        yield new Internet($this->faker);
+
+        yield new Company($this->faker);
     }
 }

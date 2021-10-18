@@ -2,29 +2,23 @@
 
 namespace Faker\Test\Provider\fr_FR;
 
-use Faker\Generator;
 use Faker\Provider\fr_FR\Address;
-use PHPUnit\Framework\TestCase;
-
-final class AddressTest extends TestCase
-{
+use Faker\Test\TestCase;
 
 /**
- * @var Faker\Generator
+ * @group legacy
  */
-  private $faker;
+final class AddressTest extends TestCase
+{
+    public function testSecondaryAddress()
+    {
+        $secondaryAdress = $this->faker->secondaryAddress();
+        self::assertNotEmpty($secondaryAdress);
+        self::assertIsString($secondaryAdress);
+    }
 
-  protected function setUp()
-  {
-      $faker = new Generator();
-      $faker->addProvider(new Address($faker));
-      $this->faker = $faker;
-  }
-
-  public function testSecondaryAddress()
-  {
-    $secondaryAdress = $this->faker->secondaryAddress();
-    $this->assertNotEmpty($secondaryAdress);
-    $this->assertInternalType('string', $secondaryAdress);
-  }
+    protected function getProviders(): iterable
+    {
+        yield new Address($this->faker);
+    }
 }

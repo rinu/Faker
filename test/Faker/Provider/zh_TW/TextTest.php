@@ -2,18 +2,22 @@
 
 namespace Faker\Test\Provider\zh_TW;
 
-use PHPUnit\Framework\TestCase;
+use Faker\Test\TestCase;
 
+/**
+ * @group legacy
+ */
 final class TextTest extends TestCase
 {
     private $textClass;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->textClass = new \ReflectionClass('Faker\Provider\zh_TW\Text');
     }
 
-    protected function getMethod($name) {
+    protected function getMethod($name)
+    {
         $method = $this->textClass->getMethod($name);
 
         $method->setAccessible(true);
@@ -21,55 +25,55 @@ final class TextTest extends TestCase
         return $method;
     }
 
-    function testItShouldExplodeTheStringToArray()
+    public function testItShouldExplodeTheStringToArray()
     {
-        $this->assertSame(
-            array('中', '文', '測', '試', '真', '有', '趣'),
-            $this->getMethod('explode')->invokeArgs(null, array('中文測試真有趣'))
+        self::assertSame(
+            ['中', '文', '測', '試', '真', '有', '趣'],
+            $this->getMethod('explode')->invokeArgs(null, ['中文測試真有趣'])
         );
 
-        $this->assertSame(
-            array('標', '點', '，', '符', '號', '！'),
-            $this->getMethod('explode')->invokeArgs(null, array('標點，符號！'))
-        );
-    }
-
-    function testItShouldReturnTheStringLength()
-    {
-        $this->assertContains(
-            $this->getMethod('strlen')->invokeArgs(null, array('中文測試真有趣')),
-            array(7, 21)
+        self::assertSame(
+            ['標', '點', '，', '符', '號', '！'],
+            $this->getMethod('explode')->invokeArgs(null, ['標點，符號！'])
         );
     }
 
-    function testItShouldReturnTheCharacterIsValidStartOrNot()
+    public function testItShouldReturnTheStringLength()
     {
-        $this->assertTrue($this->getMethod('validStart')->invokeArgs(null, array('中')));
-
-        $this->assertTrue($this->getMethod('validStart')->invokeArgs(null, array('2')));
-
-        $this->assertTrue($this->getMethod('validStart')->invokeArgs(null, array('Hello')));
-
-        $this->assertFalse($this->getMethod('validStart')->invokeArgs(null, array('。')));
-
-        $this->assertFalse($this->getMethod('validStart')->invokeArgs(null, array('！')));
+        self::assertContains(
+            $this->getMethod('strlen')->invokeArgs(null, ['中文測試真有趣']),
+            [7, 21]
+        );
     }
 
-    function testItShouldAppendEndPunctToTheEndOfString()
+    public function testItShouldReturnTheCharacterIsValidStartOrNot()
     {
-        $this->assertSame(
+        self::assertTrue($this->getMethod('validStart')->invokeArgs(null, ['中']));
+
+        self::assertTrue($this->getMethod('validStart')->invokeArgs(null, ['2']));
+
+        self::assertTrue($this->getMethod('validStart')->invokeArgs(null, ['Hello']));
+
+        self::assertFalse($this->getMethod('validStart')->invokeArgs(null, ['。']));
+
+        self::assertFalse($this->getMethod('validStart')->invokeArgs(null, ['！']));
+    }
+
+    public function testItShouldAppendEndPunctToTheEndOfString()
+    {
+        self::assertSame(
             '中文測試真有趣。',
-            $this->getMethod('appendEnd')->invokeArgs(null, array('中文測試真有趣'))
+            $this->getMethod('appendEnd')->invokeArgs(null, ['中文測試真有趣'])
         );
 
-        $this->assertSame(
+        self::assertSame(
             '中文測試真有趣。',
-            $this->getMethod('appendEnd')->invokeArgs(null, array('中文測試真有趣，'))
+            $this->getMethod('appendEnd')->invokeArgs(null, ['中文測試真有趣，'])
         );
 
-        $this->assertSame(
+        self::assertSame(
             '中文測試真有趣！',
-            $this->getMethod('appendEnd')->invokeArgs(null, array('中文測試真有趣！'))
+            $this->getMethod('appendEnd')->invokeArgs(null, ['中文測試真有趣！'])
         );
     }
 }

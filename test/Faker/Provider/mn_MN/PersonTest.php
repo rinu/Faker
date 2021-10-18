@@ -2,27 +2,26 @@
 
 namespace Faker\Test\Provider\mn_MN;
 
-use Faker\Generator;
 use Faker\Provider\mn_MN\Person;
-use PHPUnit\Framework\TestCase;
+use Faker\Test\TestCase;
 
+/**
+ * @group legacy
+ */
 final class PersonTest extends TestCase
 {
     public function testName()
     {
-        $faker = new Generator();
-        $faker->addProvider(new Person($faker));
-        $faker->seed(1);
-
-        $this->assertRegExp('/^[А-Я]{1}\.[\w\W]+$/u', $faker->name);
+        self::assertMatchesRegularExpression('/^[А-Я]{1}\.[\w\W]+$/u', $this->faker->name);
     }
 
     public function testIdNumber()
     {
-        $faker = new Generator();
-        $faker->addProvider(new Person($faker));
-        $faker->seed(2);
+        self::assertMatchesRegularExpression('/^[А-Я]{2}\d{8}$/u', $this->faker->idNumber);
+    }
 
-        $this->assertRegExp('/^[А-Я]{2}\d{8}$/u', $faker->idNumber);
+    protected function getProviders(): iterable
+    {
+        yield new Person($this->faker);
     }
 }

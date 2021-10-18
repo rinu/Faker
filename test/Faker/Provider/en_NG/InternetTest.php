@@ -1,33 +1,28 @@
 <?php
 
-namespace Faker\Test\Provider\ng_NG;
+namespace Faker\Test\Provider\en_NG;
 
-use Faker\Generator;
-use Faker\Provider\en_NG\Person;
 use Faker\Provider\en_NG\Internet;
-use PHPUnit\Framework\TestCase;
+use Faker\Provider\en_NG\Person;
+use Faker\Test\TestCase;
 
+/**
+ * @group legacy
+ */
 final class InternetTest extends TestCase
 {
-
-    /**
-     * @var Generator
-     */
-    private $faker;
-
-    protected function setUp()
-    {
-        $faker = new Generator();
-        $faker->addProvider(new Person($faker));
-        $faker->addProvider(new Internet($faker));
-        $this->faker = $faker;
-    }
-
     public function testEmailIsValid()
     {
         $email = $this->faker->email();
-        $this->assertNotFalse(filter_var($email, FILTER_VALIDATE_EMAIL));
-        $this->assertNotEmpty($email);
-        $this->assertInternalType('string', $email);
+        self::assertNotFalse(filter_var($email, FILTER_VALIDATE_EMAIL));
+        self::assertNotEmpty($email);
+        self::assertIsString($email);
+    }
+
+    protected function getProviders(): iterable
+    {
+        yield new Person($this->faker);
+
+        yield new Internet($this->faker);
     }
 }
